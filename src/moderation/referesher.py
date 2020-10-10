@@ -32,9 +32,11 @@ class Refresher:
     
     @machine.output()
     def refresh(self):
-        retries = range(self._max_retries - 1) if self._max_retries is not None else itertools.count()
+        retries = (range(self._max_retries - 1)
+                   if self._max_retries is not None
+                   else itertools.count())
         for retry in retries:
             self._wait_and_get(next(self._backoff()))
-        
-    @fresh.upon(get_value, enter=fresh, outputs=[self.get_fresh_value])
-    @stale.upon(get_value, enter=fresh, outputs=[self.refresh])
+
+    fresh.upon(get_value, enter=fresh, outputs=[self.get_fresh_value])
+    stale.upon(get_value, enter=fresh, outputs=[self.refresh])
