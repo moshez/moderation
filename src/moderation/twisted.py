@@ -11,5 +11,5 @@ def retry_policy(backoff):
     def ret_value(attempts):
         if attempts == 0:
             reset(backoff)
-        return next(backoff) 
+        return next(backoff)
 '''

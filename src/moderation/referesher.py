@@ -7,30 +7,30 @@ class Refresher:
     _exceptions: Sequence[type]
     _max_retries: Optional[int] = attr.ib(default=None)
     _value: Optional = attr.ib(default=None)
-    
+
     @_machine.state()
     def stale():
         pass
-    
+
     @_machine.state()
     def fresh():
         pass
-    
+
     @_machine.input()
     def mark_stale(self):
         pass
-        
+
     @stale.upon(mark_stale, enter=stale)
     @fresh.upon(mark_stale, enter=stale)
-    
+
     @machine.input()
     def get_value(self):
         pass
-    
+
     @machine.output()
     def get_fresh_value(self):
         return self._value
-    
+
     @machine.output()
     def refresh(self):
         retries = (range(self._max_retries - 1)

@@ -44,10 +44,10 @@ def lint(session):
     session.run("flake8", *black_compat, f"src/{name}")
     session.run(
         "mypy",
-        "--disallow-untyped-defs",
+        # "--disallow-untyped-defs",
         "--warn-unused-ignores",
         "--ignore-missing-imports",
-        "src/pycus",
+        f"src/{name}",
     )
 
 
