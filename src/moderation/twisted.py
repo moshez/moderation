@@ -1,3 +1,4 @@
+'''
 def retry_policy(backoff):
     """Retry policy for Twisted clients
 
@@ -11,3 +12,4 @@ def retry_policy(backoff):
         if attempts == 0:
             reset(backoff)
         return next(backoff) 
+'''

@@ -1,3 +1,4 @@
+"""
 @attr.s(auto_attribs=True)
 class Refresher:
     _machine = automat.MethodicalMachine()
@@ -40,3 +41,4 @@ class Refresher:
 
     fresh.upon(get_value, enter=fresh, outputs=[self.get_fresh_value])
     stale.upon(get_value, enter=fresh, outputs=[self.refresh])
+"""
