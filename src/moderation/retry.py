@@ -1,3 +1,8 @@
+import functools
+import time
+
+from moderation import strategies
+
 def retry(backoff, sleeper=time.sleep, exceptions=(), retries=3):
     exceptions = tuple(exceptions)
     def real_decorator(func):
@@ -14,9 +19,8 @@ def retry(backoff, sleeper=time.sleep, exceptions=(), retries=3):
                 try:
                     ret_value = func(*args, **kwargs)
                 except exceptions:
-                    sleeper(next(backoff))
                     raise
-            reset(backoff)
+            strategies.reset(backoff)
             return ret_value
         return wrapper
     return real_decorator
