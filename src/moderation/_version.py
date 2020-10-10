@@ -7,5 +7,5 @@ Provides moderation version information.
 
 from incremental import Version
 
-__version__ = Version('moderation', 20, 10, 0)
+__version__ = Version("moderation", 20, 10, 0)
 __all__ = ["__version__"]

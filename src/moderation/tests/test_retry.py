@@ -6,7 +6,6 @@ from moderation import retry, strategies
 
 
 class TestRetries(unittest.TestCase):
-
     def setUp(self):
         self.func = mock.MagicMock(name="function")
         self.sleeper = mock.MagicMock(name="time.sleep")

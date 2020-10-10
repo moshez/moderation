@@ -37,7 +37,7 @@ def tests(session):
 
 @nox.session(python="3.8")
 def lint(session):
-    files = ["src/{name}", "noxfile.py", "setup.py"]
+    files = [f"src/{name}", "noxfile.py", "setup.py"]
     session.install("-e", ".[lint]")
     session.run("black", "--check", "--diff", *files)
     black_compat = ["--max-line-length=88", "--ignore=E203"]
