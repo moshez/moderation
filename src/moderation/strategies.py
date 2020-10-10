@@ -1,44 +1,63 @@
+import functools
+import operator
+import random
+
 _RESET = object()
 
+def _advance_once(func):
+    @functools.wraps(func)
+    def ret_func(*args, **kwargs):
+        ret = func(*args, **kwargs)
+        next(ret)
+        return ret
+    return ret_func
+
+@_advance_once
 def fibonacci():
+    got = yield None
     while True:
-        a, b = 0, 1
-        if (yield a) is _RESET:
-            yield 0
-            continue
-        while True:
-            if (yield b) is _RESET:
-                yield 0
-                break
+        a, b = 0, 1 
+        while got is _RESET:
+            got = yield None
+        yield a
+        while True:                                                        
+            if (got := (yield b)) is _RESET:
+                break   
             a, b = b, a + b
 
+@_advance_once
 def exponential(base):
+    got = yield None
     value = 1
     while True:
-        if (yield value) is _RESET:
+        while got is _RESET:
             value = 1
-        else:
-            value *= base
+            got = yield None
+        got = yield value
+        value *= base
 
+@_advance_once
 def linear():
-    value = 1
+    got = yield None
+    value = 0
     while True:
-        if (yield value) is _RESET:
+        while got is _RESET:
             value = 0
-        else:
-            value += 1
+            got = yield None
+        got = yield value
+        value += 1
 
 def transform(generator, *transformers):
+    @_advance_once
     def inner():
-        sent = yield 0
+        sent = yield None
         while True:
             value = generator.send(sent)
-            for transformer in transformers:
-                value = transformer(value)
+            if value is not None:
+                for transformer in transformers:
+                    value = transformer(value)
             sent = yield value
-    ret_value = inner()
-    next(ret_value)
-    return ret_value
+    return inner()
     
 def scale(factor):
     return functools.partial(operator.mul, factor)
